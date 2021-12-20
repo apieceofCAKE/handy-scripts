@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo 'Starting Docker...'
+service docker start
+echo 'Sleeping for 10 seconds...'
+sleep 10
+echo 'Starting k3s server...'
+/usr/local/bin/k3s server
