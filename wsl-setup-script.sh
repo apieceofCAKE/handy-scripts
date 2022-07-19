@@ -63,7 +63,9 @@ tee .gitconfig <<EOL
 [init]
     defaultBranch = main
 [commit]
-    gpgsign = true
+    gpgSign = true
+[gpg]
+    program = /usr/bin/gpg
 # Conditional configuration for work repositories
 [includeIf "gitdir:~/repositories/work/"]
     path = .gitconfig.work
