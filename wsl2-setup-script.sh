@@ -171,7 +171,7 @@ fi
 
 echo  " "
 read -p "Do you want to configure bash-completion? [y/n] " bashReply
-if [[ $kubectlReply =~ ^[Yy]$ ]]
+if [[ $bashReply =~ ^[Yy]$ ]]
 then
 	echo $sudoPassword | sudo -S apt install bash-completion -y
 	echo -e '\n# Enable kubectl completion using bash\nsource <(kubectl completion bash)' >> ~/.bashrc
