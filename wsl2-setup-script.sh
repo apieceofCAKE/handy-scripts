@@ -150,8 +150,8 @@ read -p "Do you want to set up Minikube? [y/n] " minikubeReply
 if [[ $minikubeReply =~ ^[Yy]$ ]]
 then
 	cd ~
-	mkdir Downloads
-	cd Downloads
+	mkdir downloads
+	cd downloads
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
 	echo $sudoPassword | sudo -S install minikube-linux-amd64 /usr/local/bin/minikube
