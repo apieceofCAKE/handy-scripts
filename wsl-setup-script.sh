@@ -12,79 +12,116 @@
 
 echo -e "\nStarting script...\n"
 read -s -p "Enter Password for sudo: " sudoPassword
-echo -e "\nok"
+echo -e "\n "
 read -p "Enter email for standard Git repositories: " standardEmail
-echo "ok"
+echo " "
 read -p "Enter name for standard Git repositories: " standardName
-echo  "ok"
+echo  " "
 read -p "Enter email for work Git repositories: " workEmail
-echo  "ok"
+echo  " "
 read -p "Enter name for work Git repositories: " workName
-echo  "ok"
+echo  " "
 
-echo -e "\nUpdating and upgrading packages...\n"
+
+
+read -p "Do you want to update and upgrade packages [y/n]? " updateAndUpgradeReply
+if [[ $updateAndUpgradeReply =~ ^[Yy]$ ]]
+then
+	echo -e "\nUpdating and upgrading packages...\n"
+	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y 
 echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y
+	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y 
+fi
 
-echo -e "\nGenerating SSH keys...\n"
-ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "${standardEmail}"
-ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519.work -C "${workEmail}"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-ssh-add ~/.ssh/id_ed25519.work
 
-echo -e "\nSetting up GPG key reference for Git...\n"
-touch ~/.bashrc_backup
-cat ~/.bashrc > ~/.bashrc_backup
-echo -e '\nexport GPG_TTY=$(tty)' >> ~/.bashrc
-echo "Done!"
+echo  " "
+read -p "Do you want to generate and set up SSH keys? [y/n] " sshReply
+if [[ $sshReply =~ ^[Yy]$ ]]
+then
+	echo -e "\nGenerating SSH keys...\n"
+	ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "${standardEmail}"
+	ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519.work -C "${workEmail}"
+	eval "$(ssh-agent -s)"
+	ssh-add ~/.ssh/id_ed25519
+	ssh-add ~/.ssh/id_ed25519.work
+fi
 
-echo -e "\nCreating repo folder on user home with work and open repos...\n"
-cd ~
-mkdir repositories
-cd repositories
-mkdir work
-mkdir standard
-echo "Created!"
+echo  " "
+read -p "Do you want to set up GPG keys reference and cache password for 3 hours after first prompt? [y/n] " gpgReply
+if [[ $gpgReply =~ ^[Yy]$ ]]
+then
+	echo -e "\nSetting up GPG key reference..."
+	touch ~/.bashrc_backup
+	cat ~/.bashrc > ~/.bashrc_backup
+	echo -e '\n# Enable reference to tty output for GPG environment variable\nexport GPG_TTY=$(tty)' >> ~/.bashrc
 
-echo -e "\nSetting up Git and GitHub...\n"
-cd ~
-touch .gitconfig
-touch .gitconfig.work
+	echo -e "\nSetting GPG agent to not ask for the passphrase again in three hours...\n"
+	touch ~/.gnupg/gpg-agent.conf
+	tee ~/.gnupg/gpg-agent.conf <<-EOL
+	default-cache-ttl 10800
+	EOL
+	echo "Done!"
+fi
 
-tee .gitconfig <<EOL
-# Common and fallback configurations
-[user]
-    name = ${standardName}
-    email = ${standardEmail}
-[core]
-    sshCommand = ssh -i ~/.ssh/id_ed25519
-[color]
-    ui = auto
-[init]
-    defaultBranch = main
-[commit]
-    gpgSign = true
-[gpg]
-    program = /usr/bin/gpg
-# Conditional configuration for work repositories
-[includeIf "gitdir:~/repositories/work/"]
-    path = .gitconfig.work
-EOL
+echo  " "
+read -p "Do you want to set up repo folders? [y/n] " foldersReply
+if [[ $foldersReply =~ ^[Yy]$ ]]
+then
+	echo -e "\nCreating repo folder on user home with work and standard repos...\n"
+	cd ~
+	mkdir -p repositories
+	cd repositories
+	mkdir -p work
+	mkdir -p standard
+	echo "Created!"
+fi
 
-tee .gitconfig.work <<EOL
-[user]
-    name = ${workName}
-    email = ${workEmail}
-[core]
-    sshCommand = ssh -i ~/.ssh/id_ed25519.work
-EOL
+echo  " "
+read -p "Do you want to set up Git? [y/n] " gitReply
+if [[ $gitReply =~ ^[Yy]$ ]]
+then
+	echo -e "\nSetting up Git...\n"
+	cd ~
+	touch .gitconfig
+	touch .gitconfig.work
+
+	tee .gitconfig <<-EOL
+	# Common and fallback configurations
+	[user]
+		name = ${standardName}
+		email = ${standardEmail}
+	[core]
+		sshCommand = ssh -i ~/.ssh/id_ed25519
+	[color]
+		ui = auto
+	[init]
+		defaultBranch = main
+	[commit]
+		gpgSign = true
+	[gpg]
+		program = /usr/bin/gpg
+	# Conditional configuration for work repositories
+	[includeIf "gitdir:~/repositories/work/"]
+		path = .gitconfig.work
+	EOL
+
+	echo " "
+	tee .gitconfig.work <<-EOL
+	[user]
+		name = ${workName}
+		email = ${workEmail}
+	[core]
+		sshCommand = ssh -i ~/.ssh/id_ed25519.work
+	EOL
+fi
 
 # At this point, you should add the public keys to GitHub
 
-echo -e "\nSetting GPG agent to not ask for the passphrase again in three hours...\n"
-touch ~/.gnupg/gpg-agent.conf
-tee ~/.gnupg/gpg-agent.conf <<EOL
-default-cache-ttl 10800
-EOL
 
-echo "Done!"
+
+
+
+
+
+
+echo -e "\nDone!"
