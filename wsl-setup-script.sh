@@ -21,8 +21,8 @@ read -p "Enter email for work Git repositories: " workEmail
 echo  " "
 read -p "Enter name for work Git repositories: " workName
 echo  " "
-
-
+read -p "Enter GPG key ID for the key associated with Git: " gpgKey
+echo " "
 
 read -p "Do you want to update and upgrade packages [y/n]? " updateAndUpgradeReply
 if [[ $updateAndUpgradeReply =~ ^[Yy]$ ]]
@@ -90,6 +90,7 @@ then
 	[user]
 		name = ${standardName}
 		email = ${standardEmail}
+		signingkey = ${gpgKey}
 	[core]
 		sshCommand = ssh -i ~/.ssh/id_ed25519
 	[color]
