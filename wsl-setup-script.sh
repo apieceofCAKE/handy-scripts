@@ -1,14 +1,16 @@
 #!/usr/bin/bash
 
 # This script was tested with the Ubuntu 20.04. Before running it you should:
-# - Generate a GPG key and add it to GitHub: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+# - Have a Ubuntu 20.04 WSL2 instance ready
+# - Generate a GPG key (and add it to GitHub while you're at it): https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 
 # To do: 
-# - Ask for permission before each section
 # - Add color to echoes
-# - Include installation of VS Code
-# - Include installation of Docker engine
-# - Include installation of K3s
+# - Include installation of Terraform
+# - Include setup of Pip and Pipenv
+# - Include setup for Javascript and Typescript 
+# - Implement restrictions for coupled steps if a previous one was skipped
+# - Improve command and output printing
 
 echo -e "\nStarting script...\n"
 read -s -p "Enter Password for sudo: " sudoPassword
@@ -29,10 +31,13 @@ if [[ $updateAndUpgradeReply =~ ^[Yy]$ ]]
 then
 	echo -e "\nUpdating and upgrading packages...\n"
 	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y 
-echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y
-	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y 
 fi
 
+# To exit the script execution otherwise:
+# if [[ ! $updateAndUpgradeReply =~ ^[Yy]$ ]]
+# then
+#     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
+# fi
 
 echo  " "
 read -p "Do you want to generate and set up SSH keys? [y/n] " sshReply
