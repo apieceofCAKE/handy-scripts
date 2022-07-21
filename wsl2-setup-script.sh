@@ -170,6 +170,28 @@ then
 fi
 
 echo  " "
+read -p "Do you want to install kubelogin? [y/n] " kubeloginReply
+if [[ $kubeloginReply =~ ^[Yy]$ ]]
+then
+	cd ~/downloads
+	echo $sudoPassword | sudo -S apt install unzip -y
+ 	curl -fsSLo ./kubelogin-linux-amd64.zip.zip https://github.com/Azure/kubelogin/releases/download/v0.0.17/kubelogin-linux-amd64.zip
+	unzip kubelogin-linux-amd64.zip
+	sudo mv ./bin/linux_amd64/kubelogin /usr/bin
+fi
+
+echo  " "
+read -p "Do you want to install Helm? [y/n] " helmReply
+if [[ $helmReply =~ ^[Yy]$ ]]
+then
+	curl -fsSL https://baltocdn.com/helm/signing.asc | sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] \
+	https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+
+	echo $sudoPassword | sudo -S apt update && sudo -S apt install helm -y
+fi
+
+echo  " "
 read -p "Do you want to configure bash-completion? [y/n] " bashReply
 if [[ $bashReply =~ ^[Yy]$ ]]
 then
