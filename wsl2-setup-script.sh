@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/bash -i
 
 # This script was tested with the Ubuntu 20.04. Before running it you should:
 # - Have a Ubuntu 20.04 WSL2 instance ready
@@ -6,8 +6,6 @@
 
 # To do: 
 # - Add color to echoes
-# - Include installation of Terraform
-# - Include setup of Pip and Pipenv
 # - Include setup for Javascript and Typescript 
 # - Implement restrictions for coupled steps if a previous one was skipped
 # - Improve command and output printing
@@ -214,5 +212,17 @@ then
 	echo -e "\nVerifying terraform installation:\n"
 	terraform -version
 fi
+
+echo  " "
+read -p "Do you want to set up Pip and Pipenv? [y/n] " pipReply
+if [[ $pipReply =~ ^[Yy]$ ]]
+then
+	echo $sudoPassword | sudo -S apt install python3-pip -y
+	pip3 --version
+	pip install pipenv
+fi
+
+source ~/.bashrc
+source ~/.profile
 
 echo -e "\nDone!"
