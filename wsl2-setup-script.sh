@@ -165,17 +165,7 @@ then
 	https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 	echo $sudoPassword | sudo -S apt update && sudo -S apt install kubectl -y
-fi
-
-echo  " "
-read -p "Do you want to install kubelogin? [y/n] " kubeloginReply
-if [[ $kubeloginReply =~ ^[Yy]$ ]]
-then
-	cd ~/downloads
-	echo $sudoPassword | sudo -S apt install unzip -y
- 	curl -fsSLo ./kubelogin-linux-amd64.zip.zip https://github.com/Azure/kubelogin/releases/download/v0.0.17/kubelogin-linux-amd64.zip
-	unzip kubelogin-linux-amd64.zip
-	sudo mv ./bin/linux_amd64/kubelogin /usr/bin
+	
 fi
 
 echo  " "
