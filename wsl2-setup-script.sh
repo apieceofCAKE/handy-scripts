@@ -24,11 +24,14 @@ echo  " "
 read -p "Enter GPG key ID for the key associated with Git: " gpgKey
 echo " "
 
-read -p "Do you want to update and upgrade packages [y/n]? " updateAndUpgradeReply
+read -p "Do you want to update, upgrade and install relevant packages [y/n]? " updateAndUpgradeReply
 if [[ $updateAndUpgradeReply =~ ^[Yy]$ ]]
 then
 	echo -e "\nUpdating and upgrading packages...\n"
-	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y 
+	echo $sudoPassword | sudo -S apt update && sudo -S apt upgrade -y
+
+	echo -e "\nInstalling other tools...\n"
+	echo $sudoPassword | sudo -S apt install net-tools -y
 fi
 
 # To exit the script execution otherwise:
