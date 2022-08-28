@@ -122,12 +122,33 @@ then
 
 	echo $sudoPassword | sudo -S groupadd docker 
 	echo $sudoPassword | sudo -S usermod -aG docker $USER 
-	newgrp docker 
+	newgrp docker
 	
 	echo $sudoPassword | sudo -S service docker start
 	echo $sudoPassword | sudo -S docker run hello-world
 
 	echo -e '\n# Start Docker automatically\nsudo service docker start > /dev/null 2>&1' >> ~/.bashrc
+fi
+
+echo  " "
+read -p "Do you want to set up kubectl? [y/n] " kubectlReply
+if [[ $kubectlReply =~ ^[Yy]$ ]]
+then
+
+	echo $sudoPassword | sudo -S curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+	echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] \
+	https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+	echo $sudoPassword | sudo -S apt update && sudo -S apt install kubectl -y
+	
+fi
+
+echo  " "
+read -p "Do you want to configure bash-completion? [y/n] " bashReply
+if [[ $bashReply =~ ^[Yy]$ ]]
+then
+	echo $sudoPassword | sudo -S apt install bash-completion -y
+	echo -e '\n# Enable kubectl completion using bash\nsource <(kubectl completion bash)' >> ~/.bashrc
 fi
 
 echo  " "
@@ -137,22 +158,11 @@ then
 	cd ~
 	mkdir downloads
 	cd downloads
+
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
 	echo $sudoPassword | sudo -S install minikube-linux-amd64 /usr/local/bin/minikube
 	minikube start
-fi
-
-echo  " "
-read -p "Do you want to set up kubectl? [y/n] " kubectlReply
-if [[ $kubectlReply =~ ^[Yy]$ ]]
-then
-	echo $sudoPassword | sudo -S curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-	echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] \
-	https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-	echo $sudoPassword | sudo -S apt update && sudo -S apt install kubectl -y
-	
 fi
 
 echo  " "
@@ -164,14 +174,6 @@ then
 	https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 
 	echo $sudoPassword | sudo -S apt update && sudo -S apt install helm -y
-fi
-
-echo  " "
-read -p "Do you want to configure bash-completion? [y/n] " bashReply
-if [[ $bashReply =~ ^[Yy]$ ]]
-then
-	echo $sudoPassword | sudo -S apt install bash-completion -y
-	echo -e '\n# Enable kubectl completion using bash\nsource <(kubectl completion bash)' >> ~/.bashrc
 fi
 
 echo  " "
