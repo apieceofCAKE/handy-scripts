@@ -1,14 +1,19 @@
 #!/usr/bin/bash -i
 
-# This script was tested with the Ubuntu 20.04. Before running it you should:
-# - Have a Ubuntu 20.04 WSL2 instance ready
-# - Generate a GPG key (and add it to GitHub while you're at it): https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
-
 # To do: 
 # - Add color to echoes
 # - Include setup for Javascript and Typescript 
 # - Implement restrictions for coupled steps if a previous one was skipped
 # - Improve command and output printing
+# - Make it idempotent
+
+# This script was tested with the Ubuntu 20.04. Before running it you should:
+# - Have an Ubuntu 20.04 WSL2 instance ready. As of today, that's a way of doing this:
+#	1 - Start an elevated Powershell session.
+#	2 - wsl --list --online (To check what are the available distros. Choose Ubuntu for this one.)
+# 	3 - wsl --install -d <the Ubuntu distro name given by the previous command>
+# - (Optional) Set up the Windows Terminal app
+# - Generate a GPG key (and add it to GitHub while you're at it): https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 
 echo -e "\nStarting script...\n"
 read -s -p "Enter Password for sudo: " sudoPassword
@@ -34,7 +39,7 @@ then
 	echo $sudoPassword | sudo -S apt install net-tools -y
 fi
 
-# To exit the script execution otherwise:
+# (Reference) To exit the script execution otherwise:
 # if [[ ! $updateAndUpgradeReply =~ ^[Yy]$ ]]
 # then
 #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
@@ -122,7 +127,8 @@ then
 	EOL
 fi
 
-# At this point, you should add the public keys to GitHub
+# At this point, you should add the public keys to GitHub:
+# https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 
 echo  " "
 read -p "Do you want to set up Docker engine? [y/n] " dockerReply
@@ -215,6 +221,7 @@ then
 	pip install pipenv
 fi
 
+echo -e "\nLoading .bashrc and .profile..."
 source ~/.bashrc
 source ~/.profile
 
