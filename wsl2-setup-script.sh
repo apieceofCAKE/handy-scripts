@@ -121,14 +121,18 @@ then
 	echo $sudoPassword | sudo -S apt update && sudo -S apt install  docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 
 	echo $sudoPassword | sudo -S groupadd docker 
-	echo $sudoPassword | sudo -S usermod -aG docker $USER 
-	newgrp docker
+	echo $sudoPassword | sudo -S usermod -aG docker $USER
+
+	echo -e '\n# Start Docker automatically\nsudo service docker start > /dev/null 2>&1' >> ~/.bashrc
+
+	echo -e "\nLoading .bashrc and .profile..."
+	source ~/.bashrc
+	source ~/.profile
 
 	echo -e "\nTesting Docker with the hello-world image...\n"
 	echo $sudoPassword | sudo -S service docker start
 	echo $sudoPassword | sudo -S docker run hello-world
 
-	echo -e '\n# Start Docker automatically\nsudo service docker start > /dev/null 2>&1' >> ~/.bashrc
 fi
 
 echo  " "
