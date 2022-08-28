@@ -123,7 +123,8 @@ then
 	echo $sudoPassword | sudo -S groupadd docker 
 	echo $sudoPassword | sudo -S usermod -aG docker $USER 
 	newgrp docker
-	
+
+	echo -e "\nTesting Docker with the hello-world image...\n"
 	echo $sudoPassword | sudo -S service docker start
 	echo $sudoPassword | sudo -S docker run hello-world
 
