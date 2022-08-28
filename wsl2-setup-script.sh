@@ -18,15 +18,11 @@
 echo -e "\nStarting script...\n"
 read -s -p "Enter Password for sudo: " sudoPassword
 echo -e "\n "
-read -p "Enter email for standard Git repositories: " standardEmail
+read -p "Enter email (for the Git related steps): " gitEmail
 echo " "
-read -p "Enter name for standard Git repositories: " standardName
+read -p "Enter name (for the Git related steps): " gitName
 echo  " "
-read -p "Enter email for work Git repositories: " workEmail
-echo  " "
-read -p "Enter name for work Git repositories: " workName
-echo  " "
-read -p "Enter GPG key ID for the key associated with Git: " gpgKey
+read -p "Enter GPG key ID for the key associated with Git (if it applies): " gpgKey
 echo " "
 
 read -p "Do you want to update, upgrade and install relevant packages [y/n]? " updateAndUpgradeReply
@@ -50,11 +46,9 @@ read -p "Do you want to generate and set up SSH keys? [y/n] " sshReply
 if [[ $sshReply =~ ^[Yy]$ ]]
 then
 	echo -e "\nGenerating SSH keys...\n"
-	ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "${standardEmail}"
-	ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519.work -C "${workEmail}"
+	ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "${gitEmail}"
 	eval "$(ssh-agent -s)"
 	ssh-add ~/.ssh/id_ed25519
-	ssh-add ~/.ssh/id_ed25519.work
 fi
 
 echo  " "
@@ -62,8 +56,6 @@ read -p "Do you want to set up GPG keys reference and cache password for 3 hours
 if [[ $gpgReply =~ ^[Yy]$ ]]
 then
 	echo -e "\nSetting up GPG key reference..."
-	touch ~/.bashrc_backup
-	cat ~/.bashrc > ~/.bashrc_backup
 	echo -e '\n# Enable reference to tty output for GPG environment variable\nexport GPG_TTY=$(tty)' >> ~/.bashrc
 
 	echo -e "\nSetting GPG agent to not ask for the passphrase again in three hours...\n"
@@ -75,15 +67,12 @@ then
 fi
 
 echo  " "
-read -p "Do you want to set up repo folders? [y/n] " foldersReply
-if [[ $foldersReply =~ ^[Yy]$ ]]
+read -p "Do you want to set up Git repositories folder? [y/n] " folderReply
+if [[ $folderReply =~ ^[Yy]$ ]]
 then
-	echo -e "\nCreating repo folder on user home with work and standard repos...\n"
+	echo -e "\nCreating repositories folder on user home...\n"
 	cd ~
 	mkdir -p repositories
-	cd repositories
-	mkdir -p work
-	mkdir -p standard
 	echo "Created!"
 fi
 
@@ -94,13 +83,12 @@ then
 	echo -e "\nSetting up Git...\n"
 	cd ~
 	touch .gitconfig
-	touch .gitconfig.work
 
 	tee .gitconfig <<-EOL
 	# Common and fallback configurations
 	[user]
-		name = ${standardName}
-		email = ${standardEmail}
+		name = ${gitName}
+		email = ${gitEmail}
 		signingkey = ${gpgKey}
 	[core]
 		sshCommand = ssh -i ~/.ssh/id_ed25519
@@ -112,19 +100,9 @@ then
 		gpgSign = true
 	[gpg]
 		program = /usr/bin/gpg
-	# Conditional configuration for work repositories
-	[includeIf "gitdir:~/repositories/work/"]
-		path = .gitconfig.work
 	EOL
 
 	echo " "
-	tee .gitconfig.work <<-EOL
-	[user]
-		name = ${workName}
-		email = ${workEmail}
-	[core]
-		sshCommand = ssh -i ~/.ssh/id_ed25519.work
-	EOL
 fi
 
 # At this point, you should add the public keys to GitHub:
