@@ -212,3 +212,16 @@ source ~/.bashrc
 source ~/.profile
 
 echo -e "\nDone!"
+
+# After running the script properly, some quality of life commands:
+
+# Add to sudoers (sudo visudo): 
+# 	# Allow my user to run any command using sudo, without entering the password
+# 	<user> ALL=(ALL) NOPASSWD: ALL
+
+# Merge the kubeconfig files, adding to .bashrc:
+# 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/first.config"
+# 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/second.config"
+
+# Set up network commands on .bashrc. Example:
+# 	sudo ifconfig <interface> mtu <mtu size> up
