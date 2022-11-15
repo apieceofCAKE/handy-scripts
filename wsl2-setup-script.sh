@@ -1,6 +1,7 @@
 #!/usr/bin/bash -i
 
-# To do: 
+# To do:
+# - Review the Docker, that's been breaking
 # - Add color to echoes
 # - Include setup for Javascript and Typescript 
 # - Implement restrictions for coupled steps if a previous one was skipped
@@ -213,15 +214,12 @@ source ~/.profile
 
 echo -e "\nDone!"
 
-# After running the script properly, some quality of life commands:
+# After running the script, some quality of life commands:
 
 # Add to sudoers (sudo visudo): 
 # 	# Allow my user to run any command using sudo, without entering the password
 # 	<user> ALL=(ALL) NOPASSWD: ALL
 
-# Merge the kubeconfig files, adding to .bashrc:
+# Merge the kubeconfig files (if you end up with more than one), adding the merging commands to .bashrc:
 # 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/first.config"
 # 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/second.config"
-
-# Set up network commands on .bashrc. Example:
-# 	sudo ifconfig <interface> mtu <mtu size> up
