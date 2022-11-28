@@ -8,8 +8,8 @@
 # - Improve command and output printing
 # - Make it idempotent (or use another tool)
 
-# This script was tested with the Ubuntu 20.04. Before running it you should:
-# - Have an Ubuntu 20.04 WSL2 instance ready. As of today, that's a way of doing this:n https://docs.microsoft.com/en-us/windows/wsl/install-manual
+# This script was tested with the Ubuntu 22.04. Before running it you should:
+# - Have an Ubuntu 22.04 WSL2 instance ready. As of today, that's a way of doing this:n https://docs.microsoft.com/en-us/windows/wsl/install-manual
 #	1 - Make sure you have the proper Windows features turned on for WSL to work
 #	2 - Start an elevated Powershell session.
 #	3 - wsl --list --online (To check what are the available distros. Choose Ubuntu for this one.)
