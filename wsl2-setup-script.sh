@@ -130,7 +130,6 @@ then
 	echo -e "\nTesting Docker with the hello-world image...\n"
 	echo $sudoPassword | sudo -S service docker start
 	echo $sudoPassword | sudo -S docker run hello-world
-
 fi
 
 echo  " "
@@ -138,12 +137,9 @@ read -p "Do you want to set up kubectl? [y/n] " kubectlReply
 if [[ $kubectlReply =~ ^[Yy]$ ]]
 then
 
-	echo $sudoPassword | sudo -S curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-	echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] \
-	https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
+	echo $sudoPassword | curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo -S gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+	echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo -S tee /etc/apt/sources.list.d/kubernetes.list
 	echo $sudoPassword | sudo -S apt update && sudo -S apt install kubectl -y
-	
 fi
 
 echo  " "
@@ -152,6 +148,18 @@ if [[ $bashReply =~ ^[Yy]$ ]]
 then
 	echo $sudoPassword | sudo -S apt install bash-completion -y
 	echo -e '\n# Enable kubectl completion using bash\nsource <(kubectl completion bash)' >> ~/.bashrc
+fi
+
+echo  " "
+read -p "Do you want to set up K9s? [y/n] " k9sReply
+if [[ $k9sReply =~ ^[Yy]$ ]]
+then
+	cd ~
+	curl -L https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz -o k9s
+	tar -xf k9s
+	chmod +x k9s
+	sudo -S mv ./k9s /usr/local/bin/k9s
+	echo -e "\nRun k9s to open K9s after running the script"
 fi
 
 echo  " "
