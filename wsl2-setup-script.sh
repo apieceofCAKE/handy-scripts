@@ -204,16 +204,6 @@ then
 	pip install pipenv
 fi
 
-echo  " "
-read -p "Do you want to set up Node 19 and Typescript? [y/n] " typescriptReply
-if [[ $typescriptReply =~ ^[Yy]$ ]]
-then
-	curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - && sudo apt-get install -y nodejs
-	echo  " "
-	echo $sudoPassword | sudo -S npm install -g typescript
-
-fi
-
 echo -e "\nLoading .bashrc and .profile..."
 source ~/.bashrc
 source ~/.profile
