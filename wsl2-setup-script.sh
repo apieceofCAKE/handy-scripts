@@ -2,10 +2,8 @@
 
 # To do:
 # - Review the Docker, that's been breaking
-# - Add color to echoes
 # - Include setup for Javascript and Typescript 
 # - Implement restrictions for coupled steps if a previous one was skipped
-# - Improve command and output printing
 # - Make it idempotent (or use another tool)
 
 # This script was tested with the Ubuntu 22.04. Before running it you should:
@@ -16,6 +14,10 @@
 # 	4 - wsl --install -d <the Ubuntu distro name given by the previous command>
 # - (Optional) Set up the Windows Terminal app
 # - Generate a GPG key (and add it to GitHub while you're at it): https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+
+# To run the script, on the same folder as you are and as you own user (not sudo):
+# chmod +x wsl2-setup-script.sh
+# ./wsl2-setup-script.sh
 
 echo -e "\nStarting script...\n"
 read -s -p "Enter Password for sudo: " sudoPassword
@@ -54,22 +56,16 @@ then
 fi
 
 echo  " "
-read -p "Do you want to set up GPG keys reference and cache password for 3 hours after first prompt? [y/n] " gpgReply
+read -p "Do you want to finish setting up the GPG key? [y/n] " gpgReply
 if [[ $gpgReply =~ ^[Yy]$ ]]
 then
-	echo -e "\nSetting up GPG key reference..."
-	echo -e '\n# Enable reference to tty output for GPG environment variable\nexport GPG_TTY=$(tty)' >> ~/.bashrc
-
-	echo -e "\nSetting GPG agent to not ask for the passphrase again in three hours...\n"
-	touch ~/.gnupg/gpg-agent.conf
-	tee ~/.gnupg/gpg-agent.conf <<-EOL
-	default-cache-ttl 10800
-	EOL
+	echo -e "\nSetting up..."
+	echo -e '\n# Enable reference to TTY output for a GPG-related environment variable\nexport GPG_TTY=$(tty)' >> ~/.bashrc
 	echo "Done!"
 fi
 
 echo  " "
-read -p "Do you want to set up Git repositories folder? [y/n] " folderReply
+read -p "Do you want to set up a folder for Git repositories? [y/n] " folderReply
 if [[ $folderReply =~ ^[Yy]$ ]]
 then
 	echo -e "\nCreating repositories folder on user home...\n"
