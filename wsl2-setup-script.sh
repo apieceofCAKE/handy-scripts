@@ -2,6 +2,7 @@
 
 # To do:
 # - Review the Docker, that's been breaking
+# - Use asdf wherever is possible.
 # - Include setup for Javascript and Typescript 
 # - Implement restrictions for coupled steps if a previous one was skipped
 # - Make it idempotent (or use another tool)
