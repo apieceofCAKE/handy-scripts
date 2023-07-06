@@ -221,10 +221,18 @@ echo -e "\nDone!"
 
 # After running the script, some quality of life commands:
 
-# Add to sudoers (sudo visudo): 
-# 	# Allow my user to run any command using sudo, without entering the password
-# 	<user> ALL=(ALL) NOPASSWD: ALL
+# - Add to sudoers (sudo visudo): 
+# # Allow my user to run any command using sudo, without entering the password
+# <user> ALL=(ALL) NOPASSWD: ALL
 
 # Merge the kubeconfig files (if you end up with more than one), adding the merging commands to .bashrc:
-# 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/first.config"
-# 	export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/second.config"
+# # Kubeconfig merge
+# export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/first.config"
+# export KUBECONFIG="${KUBECONFIG}:${HOME}/.kube/second.config"
+
+# I also needed the following added to .bashrc at some point:
+
+# # Network setup
+# sudo ifconfig eth0 mtu 1400 up
+# # Sync time
+# sudo hwclock -s
