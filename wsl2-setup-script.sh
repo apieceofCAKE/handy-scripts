@@ -189,8 +189,8 @@ then
 fi
 
 echo  " "
-read -p "Do you want to set up Terraform? [y/n] " terraformReply
-if [[ $terraformReply =~ ^[Yy]$ ]]
+read -p "Do you want to set up Terraform and Packer? [y/n] " terraformPackerReply
+if [[ $terraformPackerReply =~ ^[Yy]$ ]]
 then
 	curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 	
@@ -202,6 +202,8 @@ then
 	echo $sudoPassword | sudo -S apt update && sudo -S apt install terraform -y
 	echo -e "\nVerifying terraform installation:\n"
 	terraform -version
+	echo $sudoPassword | sudo -S apt install packer -y
+	packer -version
 fi
 
 echo  " "
