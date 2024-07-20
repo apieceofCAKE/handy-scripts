@@ -8,15 +8,11 @@
 # - Make it idempotent (or use another tool)
 
 # This script was tested with the Ubuntu 22.04. Before running it you should:
-# - Have an Ubuntu 22.04 WSL2 instance ready. As of today, that's a way of doing this:n https://docs.microsoft.com/en-us/windows/wsl/install-manual
-#	1 - Make sure you have the proper Windows features turned on for WSL to work
-#	2 - Start an elevated Powershell session.
-#	3 - wsl --list --online (To check what are the available distros. Choose Ubuntu for this one.)
-# 	4 - wsl --install -d <the Ubuntu distro name given by the previous command>
-# - (Optional) Set up the Windows Terminal app
+# - Have an Ubuntu 22.04 WSL2 instance ready. As of today, on Windows 11, this is the way of doing this: https://learn.microsoft.com/en-us/windows/wsl/install
+# - (Optional) Set up the Windows Terminal app if not already set
 # - Generate a GPG key (and add it to GitHub while you're at it): https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 
-# To run the script, on the same folder as you are and as you own user (not sudo):
+# To run the script, on the same folder as you are and as your own user (no sudo):
 # chmod +x wsl2-setup-script.sh
 # ./wsl2-setup-script.sh
 
