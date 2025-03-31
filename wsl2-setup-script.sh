@@ -234,3 +234,15 @@ echo -e "\nDone!"
 # sudo ifconfig eth0 mtu 1400 up
 # # Sync time
 # sudo hwclock -s
+
+# Install asdf (need to put it properly as part of the script):
+#
+# mkdir -p ~/.asdf
+# cd ~/.asdf
+# Choose the release here: https://github.com/asdf-vm/asdf/releases
+# wget <release link>
+# chmod +x asdf
+# sudo vim ~/.bashrc
+# Add to the file: export PATH="$HOME/.asdf:$PATH"
+# source ~/.bashrc
+# To test: type -a asdf
